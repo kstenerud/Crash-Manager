@@ -1,0 +1,117 @@
+Crash Manager
+-------------
+
+An iOS library for recording crash events.
+
+
+License
+-------
+
+Crash Manager is released under the Apache License v2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+
+Introduction
+------------
+
+Crash Manager, when added to your project, will intercept any crashes as they
+occur, and record a stack trace to help diagnose the problem later.
+
+This is useful for tracking down intermittent bugs that only seem to happen
+in the wild.
+
+Yes, Apple does provide functionality for getting crash reports from users,
+but it doesn't always seem to work, and you can't make it automatically go
+to a backend server where the developers can be immediately alerted.
+
+
+Installation
+------------
+
+You can either copy from the "Libraries" group in the demo project via XCode,
+or from the "libs" folder via Finder.
+
+1. Copy everything from "CrashManager" into your project.
+
+2. If you also want to use the mailer functionality, copy everything from "Mailer"
+	into your project.
+
+
+Usage
+-----
+
+### Starting CrashManager ###
+
+To start managing crashes, put the following in your app delegate's
+application:didFinishLoading method:
+
+	[[CrashManager sharedInstance] manageCrashes];
+
+You can also register your delegate to receive crash events:
+
+	[[CrashManager sharedInstance] setCrashDelegate:self selector:@selector(notifyException:stackTrace:)];
+
+Your crash event delegate method would look something like this:
+
+	- (void) notifyException:(NSException*) exception stackTrace:(NSArray*) stackTrace
+
+
+### Crashing With CrashManager ###
+
+When your app crashes, CrashManager will write a crash report to the location
+specified by [CrashManager sharedInstance].errorReportPath.  If unset, this
+defaults to "error_report.txt" in your Documents directory.
+
+Once the error report is written, it will attempt to call the crash delegate,
+if a delegate has been set.
+
+Once the crash delegate returns, the crash-in-progress will run to completion
+and your app will terminate.
+
+
+### Dealing With Crash Reports ###
+
+CrashManager includes convenience methods for checking for, and fetching a
+crash report.
+
+Use [CrashManager sharedInstance].errorReportPresent to test if an error
+report exists.
+
+Use [CrashManager sharedInstance].errorReport to fetch the report itself
+(Note: Accessing this property causes the report to be read from disk, so it's
+a good idea to save a local copy rather than hammering the filesystem).
+
+One possible crash reporting process could be as follows:
+1. Application starts and enters UIKit.
+2. In your first view controller, check for the existence of a crash report.
+3. If a crash report exists, send a copy of it to your backend server, or email it.
+4. Delete the crash report using [[CrashManager sharedInstance] deleteErrorReport].
+
+
+Important Notes
+---------------
+
+### Signals ###
+
+When a signal is raised in iOS, the topmost entry on the stack gets clobbered.
+As a result, you'll only see up to the method that called the method that
+crashed.
+
+The following signals are caught by CrashManager:
+* Abort
+* Broken Pipe
+* Bus Error
+* Floating Point Exception
+* Illegal Instruction
+* Segmentation Fault
+
+
+### EXC_BAD_ACCESS ###
+
+The dreaded EXC_BAD_ACCESS is triggered when your program attempts to access
+memory that doesn't belong to it (or no longer belongs to it).  This most
+commonly occurs when you try to access an object that's already been
+deallocated.
+
+When the system detects a bad access, it shuts down stdout, which means that
+anything you try to output using NSLog will not show up on the console.
