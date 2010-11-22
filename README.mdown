@@ -7,8 +7,9 @@ An iOS library for recording crash events.
 License
 -------
 
-Crash Manager is released under the Apache License v2.0
-http://www.apache.org/licenses/LICENSE-2.0
+Copyright 2010 by Karl Stenerud.
+
+Crash Manager is released under the [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 
 Introduction
@@ -31,9 +32,9 @@ Installation
 You can either copy from the "Libraries" group in the demo project via XCode,
 or from the "libs" folder via Finder.
 
-1. Copy everything from "CrashManager" into your project.
+ 1. Copy everything from "CrashManager" into your project.
 
-2. If you also want to use the mailer functionality, copy everything from "Mailer"
+ 2. If you also want to use the mailer functionality, copy everything from "Mailer"
 	into your project.
 
 
@@ -82,10 +83,11 @@ Use [CrashManager sharedInstance].errorReport to fetch the report itself
 a good idea to save a local copy rather than hammering the filesystem).
 
 One possible crash reporting process could be as follows:
-1. Application starts and enters UIKit.
-2. In your first view controller, check for the existence of a crash report.
-3. If a crash report exists, send a copy of it to your backend server, or email it.
-4. Delete the crash report using [[CrashManager sharedInstance] deleteErrorReport].
+
+ 1. Application starts and enters UIKit.
+ 2. In your first view controller, check for the existence of a crash report.
+ 3. If a crash report exists, send a copy of it to your backend server, or email it.
+ 4. Delete the crash report using [[CrashManager sharedInstance] deleteErrorReport].
 
 
 Important Notes
