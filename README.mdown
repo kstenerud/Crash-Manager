@@ -1,3 +1,15 @@
+IMPORTANT NOTE:
+--------------
+
+This crash manager doesn't handle all possible crash situations. There are
+some kinds of crashes (such as stack overflow or corrupted object pointers)
+that can cause the crash manager to fail and not record the crash.
+
+I am working on a replacement to this library that handles ALL possible
+crash situations and is completely async-safe while still allowing
+on-device symbolication. Stay tuned!
+
+
 Crash Manager
 -------------
 
