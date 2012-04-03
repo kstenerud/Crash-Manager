@@ -188,9 +188,9 @@ static volatile __CLASSNAME__* _##__CLASSNAME__##_sharedInstance = nil;	\
 	NSAssert1(1==0, @"SynthesizeSingleton: %@ ERROR: -(void)release method did not get swizzled.", self);	\
 }	\
 	\
-- (void)releaseDoNothing{}	\
+- (oneway void)releaseDoNothing{}	\
 	\
-- (void)releaseDoSomething	\
+- (oneway void)releaseDoSomething	\
 {	\
 	@synchronized(self)	\
 	{	\
