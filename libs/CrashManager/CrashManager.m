@@ -28,7 +28,8 @@
 #include <unistd.h>
 #import "StackTracer.h"
 #import <UIKit/UIKit.h>
-
+#import "MacAdress.h"
+#import "NSString+SHA.h"
 
 /** Maximum number of stack frames to capture. */
 #define kStackFramesToCapture 40
@@ -256,8 +257,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(CrashManager);
 	NSString* data = [NSString stringWithFormat:@"App: %@\nVersion: %@\nID: %@\n%@: %@\n%@",
 					  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"],
 					  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"],
-					  [UIDevice currentDevice].uniqueIdentifier,
-					  [exception name],
+					  [[MacAdress macAdress] sha1],
+            [exception name],
 					  [exception reason],
 					  [[StackTracer sharedInstance] printableTrace:stackTrace]];
 	[data writeToFile:errorReportPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
